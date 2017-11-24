@@ -36,7 +36,8 @@ require "base64"
 		  def exists?
 		    Puppet.debug("Calling exists method ")
 		    @property_hash[:ensure] == :present
-				basic
+		    name=@resource[:name]	           
+			basic
 				#Get the existing list of web apps
 				parsed_uri = URI.parse("https://vrs.barracudanetworks.com/api/v1/webapp")
 				web_create = Net::HTTP::Get.new(parsed_uri.path)
