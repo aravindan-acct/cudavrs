@@ -57,7 +57,7 @@ require "base64"
 	      if provider = cloudobj.find { |cloud| cloud.state == state}
        		 resources[state].provider=provider
 	      end
-	    end
+		end
 	  end
 
 	  def create
