@@ -12,8 +12,8 @@ class cudavrs::vrsconfig {
     		notification_emails => 'dsavelski@blorpazort.com'
 	}
 	scan_create {"testing":
-		ensure=>present,
-		name => 'test scan',
+		ensure => present,
+		name => 'testscan',
     		max_requests_per_second => '20',
     		scan_time_limit_hours => '9',
     		crawl_max_depth => '2',

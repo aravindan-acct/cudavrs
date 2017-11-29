@@ -5,7 +5,7 @@ require "json"
 require "base64"
 
 # Puppet provider definition
-	Puppet::Type.type(:scan_create).provide :scan do
+	Puppet::Type.type(:scan_create).provide(:scan) do
 
   		desc "Create a scan on VRS"
 
@@ -13,7 +13,7 @@ require "base64"
 
 		mk_resource_methods
 		def basic
-		uri = ["wafs"]
+		uri = "wafs"
 		vrs = "https://vrs.barracudanetworks.com/api/v1"
 		user = `cat /etc/puppetlabs/puppet/bcc_credentials`
 		userjson = JSON.parse(user)
@@ -23,7 +23,7 @@ require "base64"
 		http.use_ssl = true
 		http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 		#step1 : Authenticate and fetch services
-		parsed_uri = URI.parse("#{vrs}/#{uri[0]}")
+		parsed_uri = URI.parse(vrs+"/wafs")
 		web_create = Net::HTTP::Get.new(parsed_uri.path)
 		web_create.basic_auth "#{basic_auth_user}", "#{basic_auth_pass}"
 		response = http.request(web_create)
@@ -35,7 +35,7 @@ require "base64"
 		  def exists?
 		    Puppet.debug("Calling exists method ")
 		    @property_hash[:ensure] == :present
-				basic
+				basic()
 				parsed_uri = URI.parse("https://vrs.barracudanetworks.com/api/v1/webapp")
 				web_create = Net::HTTP::Get.new(parsed_uri.path)
 				web_create.basic_auth "#{basic_auth_user}", "#{basic_auth_pass}"
@@ -44,7 +44,7 @@ require "base64"
 				services = JSON.parse (output)
 		  end
 
-	  self.instances
+	  def self.instances
 	    Puppet.debug("Callling self.instances method")
 	    instances = []
 	    return instances

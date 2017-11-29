@@ -25,7 +25,7 @@ Puppet::Type.newtype(:webapp_create) do
     newproperty(:waf_policy_name) do
       desc "waf policy name"
     end    
-    newproperty(:verify_email) do
+    newproperty(:verify_method) do
       desc "Test URL"
     end 
 
