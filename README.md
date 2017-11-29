@@ -19,13 +19,14 @@ This module can be used to configure applications scans using the Barracuda Vuln
 ## Setup
 Create a file in /etc/puppetlabs/puppet/ path called credentials.json. The file is a json file in the following format:
 
+```
 {
 "username":"waf admin username, ex. 'admin'",
 "password":"password for waf login",
 "host":"ip add of waf",
 "port":"management port of the waf"
 }
-
+```
 ### What vrs affects **OPTIONAL**
 
 If it's obvious what your module touches, you can skip this section. For
