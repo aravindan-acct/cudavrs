@@ -29,25 +29,26 @@ Create a file in /etc/puppetlabs/puppet/ path called credentials.json. The file 
 ```
 ### What vrs affects **OPTIONAL**
 
-If it's obvious what your module touches, you can skip this section. For
-example, folks can probably figure out that your mysql_instance module affects
-their MySQL instances.
+Barracuda VRS makes configuration changes on the WAF automatically mitigate vulnerabilities identified during the scan.
 
-If there's more that they should know about, though, this is the place to mention:
+Typically, the VRS will do the following changes:
+* The existing security policy is turned to active or a new security policy is created and turned to active.
+* Scanner IP addresses are whitelisted through the WAF's Trusted Hosts configuration.
 
-* A list of files, packages, services, or operations that the module will alter,
-  impact, or execute.
-* Dependencies that your module automatically installs.
-* Warnings or other important notices.
+The above mentioned configuration changes are done if the options are configured in the manifests.
 
 ### Setup Requirements **OPTIONAL**
 
-If your module requires anything extra before setting up (pluginsync enabled,
-etc.), mention it here.
+i. VRS Credentials: Its important to maintain the credentials in a file called bcc_credentials in /etc/puppetlabs/puppet/ path. The file format should be in the following format:
 
-If your most recent release breaks compatibility or requires particular steps
-for upgrading, you might want to include an additional "Upgrading" section
-here.
+```
+{
+"username":"vrs account name",
+"password":"vrs account password"
+}
+```
+ii. WAF Credentials: The provider checks the WAF serial number through a REST API call for which we have to maintain the credentials in a file called credentials.json in /etc/puppetlabs/puppet/ path. The format of the file and the required keys are mentioned in the setup section above.
+
 
 ### Beginning with vrs
 
@@ -57,10 +58,51 @@ basic use of the module.
 
 ## Usage
 
-This section is where you describe how to customize, configure, and do the
-fancy stuff with your module here. It's especially helpful if you include usage
-examples and code samples for doing things with your module.
+Creating a web application container in the VRS:
 
+``` puppet
+webapp_create{"test":
+		ensure => present,
+ 		url => 'test.blorpazort.com',
+    		name => 'blorpazort',
+    		waf_serial => '777942',  # WAF QA
+    		waf_service => 'AutomationVS',
+    		waf_policy_name => 'default',
+    		verify_method => 'email',
+    		verification_email => 'test@blorpazort.com',
+    		notification_emails => 'dsavelski@blorpazort.com'
+	}
+
+```
+Creating a scan for web application created in the VRS:
+
+``` puppet
+scan_create {"testing":
+		ensure => present,
+		name => 'testscan',
+    		max_requests_per_second => '20',
+    		scan_time_limit_hours => '9',
+    		crawl_max_depth => '2',
+    		browser_type => 'Firefox',
+    		user_agent => 'Mozilla/5.0 (Windows NT 6.3; rv=>36.0) Gecko/20100101 Firefox/36.0',
+    		evasion_techniques => 'False',
+    		auth_type => 2,  # form
+    		auth_html_form_username_parameter => 'username_param',
+    		auth_html_username => 'username',
+    		auth_html_form_password_parameter => 'password_param',
+    		auth_html_password => 'password',
+    		auth_html_form_test_url => 'http=>//test.blorpazort.com/welcome/',
+    		auth_html_form_test_value => 'test_value',
+    		auth_login_form_url => 'http=>//test.blorpazort.com/login/',
+    		excluded_address_list => '["host1", "host2"]',  # excluded_address_list
+    		excluded_url_list => '["*/patt1/*", "*patt2*"]',  # excluded_url_list
+    		excluded_file_ext_list => '["ext1", "ext2"]',  # excluded_file_ext_list
+    		webapp_id => 'webapp_id',
+    		waf_bypass => 'False',
+    		recurrence => 'manual'
+	}
+
+```
 ## Reference
 
 Here, include a complete list of your module's classes, types, providers,
