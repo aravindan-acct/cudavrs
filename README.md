@@ -14,16 +14,17 @@
 
 ## Description
 
-Start with a one- or two-sentence summary of what the module does and/or what
-problem it solves. This is your 30-second elevator pitch for your module.
-Consider including OS/Puppet version it works with.
-
-You can give more descriptive information in a second paragraph. This paragraph
-should answer the questions: "What does this module *do*?" and "Why would I use
-it?" If your module has a range of functionality (installation, configuration,
-management, etc.), this is the time to mention it.
+This module can be used to configure applications scans using the Barracuda Vulnerability Remediation Service. The service is normally used with a Barracuda Web Application Firewall but can be potentially used as an independent service. The domain / web application to be scanned should be DNS resolvable over the internet and the scan should be authorised by the domain administrator. More details can be found on [here](https://campus.barracuda.com/) in the "Barracuda Vulnerability Remediation Service" section.
 
 ## Setup
+Create a file in /etc/puppetlabs/puppet/ path called credentials.json. The file is a json file in the following format:
+
+{
+"username":"waf admin username, ex. 'admin'",
+"password":"password for waf login",
+"host":"ip add of waf",
+"port":"management port of the waf"
+}
 
 ### What vrs affects **OPTIONAL**
 
