@@ -44,6 +44,7 @@ require "base64"
 					:name		=> val["name"])
 	    return instances
 	  end
+	end
 
 	  def self.prefetch(resources)
 	    Puppet.debug("Calling prefetch method: ")
@@ -79,4 +80,3 @@ require "base64"
   	end
 		
 
-end
