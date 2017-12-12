@@ -22,7 +22,7 @@ require "base64"
 	 	  http = Net::HTTP.new('vrs.barracudanetworks.com', 443)
 		  http.use_ssl = true
 	 	  http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-		#step1 : Authenticate and fetch services
+		  #step1 : Authenticate and fetch services
 		  parsed_uri = URI.parse("https://vrs.barracudanetworks.com/webapp/json")
 		  web_create = Net::HTTP::Get.new(parsed_uri.path)
 	 	  web_create.basic_auth "#{basic_auth_user}", "#{basic_auth_pass}"
@@ -38,7 +38,7 @@ require "base64"
 				@property_hash[:ensure] == :present
 		end
 	  	def self.instances
-	      	  Puppet.debug("Callling self.instances method")
+	      	  Puppet.debug("Calling self.instances method")
 	    	  instances = []
 		  Puppet.debug ("VRS data.. #{data}")
 	    	  return instances

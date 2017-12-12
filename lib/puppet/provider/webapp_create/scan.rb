@@ -85,10 +85,10 @@ require "base64"
                         http.use_ssl = true
                         http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 			parsed_uri = URI.parse("https://vrs.barracudanetworks.com/api/v1/create_webapp")
-			scancreate = Net::HTTP::Post.new(parsed_uri.path)
-			scancreate.basic_auth "#{basic_auth_user}", "#{basic_auth_pass}"
-			scancreate.set_form_data(message(resource))
-			response = http.request(scancreate)
+			webapp_create = Net::HTTP::Post.new(parsed_uri.path)
+			webapp_create.basic_auth "#{basic_auth_user}", "#{basic_auth_pass}"
+			webapp_create.set_form_data(message(resource))
+			response = http.request(webapp_create)
 			output = response.body
 			parsed_json = JSON.parse (output)
    	 		Puppet.debug("Finished creating the scan")
