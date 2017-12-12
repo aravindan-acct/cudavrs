@@ -29,6 +29,10 @@ Puppet::Type.newtype(:webapp_create) do
       desc "Test URL"
     end 
 
+    newparam(:verify_method) do
+      desc "Email address to verify the scan"
+    end
+
     newparam(:verification_email) do
       desc "Test value"
     end 

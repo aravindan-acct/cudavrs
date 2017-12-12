@@ -12,7 +12,7 @@ require "base64"
 		Puppet.debug("Creating a scan on VRS ")
 
 		mk_resource_methods
-		def basic
+		def vrsauth
 		uri = ["wafs"]
 		vrs = "https://vrs.barracudanetworks.com/api/v1"
 		user = `cat /etc/puppetlabs/puppet/bcc_credentials`
@@ -35,7 +35,7 @@ require "base64"
 		  def exists?
 		    Puppet.debug("Calling exists method ")
 		    @property_hash[:ensure] == :present
-				basic
+				vrsauth
 				parsed_uri = URI.parse("https://vrs.barracudanetworks.com/api/v1/webapp")
 				web_create = Net::HTTP::Get.new(parsed_uri.path)
 				web_create.basic_auth "#{basic_auth_user}", "#{basic_auth_pass}"

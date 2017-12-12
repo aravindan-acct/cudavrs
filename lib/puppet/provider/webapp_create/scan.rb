@@ -34,26 +34,37 @@ require "base64"
 
 	  def self.instances
 	    Puppet.debug("Calling instances method")
-			auth = vrsauth
 			instances = []
-			services_json_parsed = @services_json
-			services_json_parsed.each do |key,value|
-				val = value
+			data = vrsauth
+			Puppet.debug ("VRS data.. #{data}")
+			if data
+			Puppet.debug ("Entering the if condition in the instances method")
+			response = JSON.parse(data)
+			#webapp = response["name"]
+			response.each do
+				val = response["name"]
+				Puppet.debug(val)
 				instances << new(
 					:ensure => :present,
-					:name		=> val["name"])
+					:name		=> val)
+		end
 	    return instances
 	  end
 	end
 
 	  def self.prefetch(resources)
 	    Puppet.debug("Calling prefetch method: ")
-			auth = vrsauth
-			instances.each do |prov|
-    		if resource = resources[prov.name]
-      		resource.provider = prov
+			service = instances
+		if service 
+
+			resources.keys.each do |name|
+
+		Puppet.debug ("still inside prefetch")
+    		if provider = service.find { |svc| svc.name == name}
+      		resources[name].provider=provider
     		end
   		end
+		end
 	  end
 
 		def message(object)
@@ -66,17 +77,23 @@ require "base64"
 	  def create
 	    Puppet.debug("Calling create method:")
 			#step2 : create the web app configuration to set up scans
+			user = `cat /etc/puppetlabs/puppet/bcc_credentials`
+                        userjson = JSON.parse(user)
+                        basic_auth_user = userjson ["username"]
+                        basic_auth_pass = userjson ["password"]
+			http = Net::HTTP.new('vrs.barracudanetworks.com', 443)
+                        http.use_ssl = true
+                        http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 			parsed_uri = URI.parse("https://vrs.barracudanetworks.com/api/v1/create_webapp")
 			scancreate = Net::HTTP::Post.new(parsed_uri.path)
 			scancreate.basic_auth "#{basic_auth_user}", "#{basic_auth_pass}"
 			scancreate.set_form_data(message(resource))
-			response = http.request(request)
+			response = http.request(scancreate)
 			output = response.body
 			parsed_json = JSON.parse (output)
-			id = parsed_json ["id"]
-			id_chomped = "#{id}".chomp
-			puts "#{id_chomped}"
-   	 @property_hash.clear
+   	 		Puppet.debug("Finished creating the scan")
+			puts ("Printing the response... #{parsed_json}")
+	@property_hash.clear
   	end
 		
-
+end
