@@ -1,19 +1,8 @@
 class cudavrs::vrsconfig {
 
-	webapp_create{"test":
-		ensure => present,
- 		url => 'test.blorpazort.com',
-    		name => 'blorpazort',
-    		waf_serial => '777942',  # WAF QA
-    		waf_service => 'AutomationVS',
-    		waf_policy_name => 'default',
-    		verify_method => 'email',
-    		verification_email => 'test@blorpazort.com',
-    		notification_emails => 'dsavelski@blorpazort.com'
-	}
-	scan_create {"testing":
+	scan_create {"demoscantesting":
 		ensure=>present,
-		name => 'test scan',
+		name => 'test_scan',
     		max_requests_per_second => '20',
     		scan_time_limit_hours => '9',
     		crawl_max_depth => '2',
@@ -25,9 +14,9 @@ class cudavrs::vrsconfig {
     		auth_html_username => 'username',
     		auth_html_form_password_parameter => 'password_param',
     		auth_html_password => 'password',
-    		auth_html_form_test_url => 'http=>//test.blorpazort.com/welcome/',
+    		auth_html_form_test_url => 'http=>//demo.selahcloud.in/welcome/',
     		auth_html_form_test_value => 'test_value',
-    		auth_login_form_url => 'http=>//test.blorpazort.com/login/',
+    		auth_login_form_url => 'http=>//demo.selahcloud.in/login/',
     		excluded_address_list => '["host1", "host2"]',  # excluded_address_list
     		excluded_url_list => '["*/patt1/*", "*patt2*"]',  # excluded_url_list
     		excluded_file_ext_list => '["ext1", "ext2"]',  # excluded_file_ext_list
